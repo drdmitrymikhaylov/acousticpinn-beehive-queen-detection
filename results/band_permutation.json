@@ -1,0 +1,169 @@
+{
+ "bands": {
+  "20-100 Hz (quiet colony)": {
+   "all_sessions": {
+    "queenright_mean": 0.3327149159352299,
+    "queenless_mean": 0.42562120307162077,
+    "difference": -0.09290628713639087,
+    "exact_p_two_sided": 0.6111111111111112,
+    "relabellings": 126,
+    "session_auc": 0.45,
+    "n_sessions": 9
+   },
+   "sessions_with_100_plus_clips": {
+    "queenright_mean": 0.3327149159352299,
+    "queenless_mean": 0.3458847651783232,
+    "difference": -0.013169849243093279,
+    "exact_p_two_sided": 0.9428571428571428,
+    "relabellings": 70,
+    "session_auc": 0.5625,
+    "n_sessions": 8
+   }
+  },
+  "100-180 Hz (low activity)": {
+   "all_sessions": {
+    "queenright_mean": 0.25597925703948643,
+    "queenless_mean": 0.29719053522366523,
+    "difference": -0.0412112781841788,
+    "exact_p_two_sided": 0.7063492063492064,
+    "relabellings": 126,
+    "session_auc": 0.45,
+    "n_sessions": 9
+   },
+   "sessions_with_100_plus_clips": {
+    "queenright_mean": 0.25597925703948643,
+    "queenless_mean": 0.3242540663242948,
+    "difference": -0.06827480928480839,
+    "exact_p_two_sided": 0.5714285714285714,
+    "relabellings": 70,
+    "session_auc": 0.375,
+    "n_sessions": 8
+   }
+  },
+  "180-260 Hz (worker flight fundamental)": {
+   "all_sessions": {
+    "queenright_mean": 0.06910618650185685,
+    "queenless_mean": 0.06064348759620345,
+    "difference": 0.008462698905653397,
+    "exact_p_two_sided": 0.7619047619047619,
+    "relabellings": 126,
+    "session_auc": 0.65,
+    "n_sessions": 9
+   },
+   "sessions_with_100_plus_clips": {
+    "queenright_mean": 0.06910618650185685,
+    "queenless_mean": 0.06512994153773209,
+    "difference": 0.003976244964124756,
+    "exact_p_two_sided": 0.9142857142857143,
+    "relabellings": 70,
+    "session_auc": 0.5625,
+    "n_sessions": 8
+   }
+  },
+  "260-400 Hz": {
+   "all_sessions": {
+    "queenright_mean": 0.13644764577146684,
+    "queenless_mean": 0.0778858739116468,
+    "difference": 0.05856177185982005,
+    "exact_p_two_sided": 0.31746031746031744,
+    "relabellings": 126,
+    "session_auc": 0.75,
+    "n_sessions": 9
+   },
+   "sessions_with_100_plus_clips": {
+    "queenright_mean": 0.13644764577146684,
+    "queenless_mean": 0.0955748629048643,
+    "difference": 0.040872782866602536,
+    "exact_p_two_sided": 0.5142857142857142,
+    "relabellings": 70,
+    "session_auc": 0.6875,
+    "n_sessions": 8
+   }
+  },
+  "400-500 Hz": {
+   "all_sessions": {
+    "queenright_mean": 0.044448756308870144,
+    "queenless_mean": 0.034194330025963476,
+    "difference": 0.010254426282906667,
+    "exact_p_two_sided": 0.5555555555555556,
+    "relabellings": 126,
+    "session_auc": 0.65,
+    "n_sessions": 9
+   },
+   "sessions_with_100_plus_clips": {
+    "queenright_mean": 0.044448756308870144,
+    "queenless_mean": 0.042487755334944095,
+    "difference": 0.0019610009739260484,
+    "exact_p_two_sided": 0.9142857142857143,
+    "relabellings": 70,
+    "session_auc": 0.5625,
+    "n_sessions": 8
+   }
+  },
+  "500-600 Hz (reported swarming band)": {
+   "all_sessions": {
+    "queenright_mean": 0.02742480088529888,
+    "queenless_mean": 0.012717668755755477,
+    "difference": 0.014707132129543402,
+    "exact_p_two_sided": 0.1746031746031746,
+    "relabellings": 126,
+    "session_auc": 0.75,
+    "n_sessions": 9
+   },
+   "sessions_with_100_plus_clips": {
+    "queenright_mean": 0.02742480088529888,
+    "queenless_mean": 0.015837519622794442,
+    "difference": 0.011587281262504436,
+    "exact_p_two_sided": 0.34285714285714286,
+    "relabellings": 70,
+    "session_auc": 0.6875,
+    "n_sessions": 8
+   }
+  },
+  "600-1000 Hz": {
+   "all_sessions": {
+    "queenright_mean": 0.061430284243946115,
+    "queenless_mean": 0.03630862786396998,
+    "difference": 0.025121656379976133,
+    "exact_p_two_sided": 0.4365079365079365,
+    "relabellings": 126,
+    "session_auc": 0.7,
+    "n_sessions": 9
+   },
+   "sessions_with_100_plus_clips": {
+    "queenright_mean": 0.061430284243946115,
+    "queenless_mean": 0.04509214712573562,
+    "difference": 0.016338137118210493,
+    "exact_p_two_sided": 0.6285714285714286,
+    "relabellings": 70,
+    "session_auc": 0.625,
+    "n_sessions": 8
+   }
+  },
+  "1-4 kHz": {
+   "all_sessions": {
+    "queenright_mean": 0.03857922078562778,
+    "queenless_mean": 0.029245955716122457,
+    "difference": 0.009333265069505325,
+    "exact_p_two_sided": 0.6746031746031746,
+    "relabellings": 126,
+    "session_auc": 0.55,
+    "n_sessions": 9
+   },
+   "sessions_with_100_plus_clips": {
+    "queenright_mean": 0.03857922078562778,
+    "queenless_mean": 0.03640291184523446,
+    "difference": 0.0021763089403933206,
+    "exact_p_two_sided": 1.0,
+    "relabellings": 70,
+    "session_auc": 0.4375,
+    "n_sessions": 8
+   }
+  }
+ },
+ "note": "Exact permutation test on the session-level band table.",
+ "dropped_sessions": [
+  "CF001"
+ ],
+ "smallest_possible_p": 0.007936507936507936
+}

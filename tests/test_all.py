@@ -102,6 +102,29 @@ def test_results_say_what_the_page_says():
     assert 0.5 < w["hive"]["wingbeat_5_features"]["pooled_auc"] < 0.8
 
 
+def test_no_band_separates_the_classes():
+    """Nine sessions admit only 126 relabellings; the exact permutation test
+    on every band must agree with the page that no band separates queenright
+    from queenless sessions, with or without the 6-clip session."""
+    from band_permutation import exact_test
+    r = ROOT / "results" / "band_permutation.json"
+    if not r.exists():
+        return
+    bands = json.loads(r.read_text())["bands"]
+    assert len(bands) == 8
+    for b in bands.values():
+        assert b["all_sessions"]["relabellings"] == 126
+        assert b["all_sessions"]["exact_p_two_sided"] > 0.1
+        assert b["sessions_with_100_plus_clips"]["relabellings"] == 70
+        assert b["sessions_with_100_plus_clips"]["exact_p_two_sided"] > 0.1
+    # the estimator itself, on a case with a known answer: a perfect
+    # separation of 4 vs 5 is the single most extreme of 126 relabellings
+    # (the mirror labelling only reaches a gap of 0.8 because the groups are
+    # unequal), so its two-sided p is 1/126 and its session AUC is 1
+    t = exact_test([1, 1, 1, 1, 0, 0, 0, 0, 0], [1, 1, 1, 1, 0, 0, 0, 0, 0])
+    assert abs(t["exact_p_two_sided"] - 1 / 126) < 1e-9 and t["session_auc"] == 1.0
+
+
 if __name__ == "__main__":
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     failed = 0

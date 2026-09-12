@@ -72,6 +72,33 @@ than the spread within a class. The 500–600 Hz "swarming band" holds 2.7 %
 versus 1.3 % — a difference, with a standard deviation across sessions of
 1.5 and 1.0.
 
+Because there are only nine sessions, "larger than the spread" can be made
+exact. Four queenright labels among nine sessions can be handed out in
+C(9, 4) = 126 ways, so every relabelling is enumerated and the observed gap
+between class means is placed among all 126 (`src/band_permutation.py`,
+`results/band_permutation.json`). The smallest two-sided p-value nine
+sessions can produce is 1/126 = 0.008; no band comes close:
+
+| band | queenright | queenless | session AUC | exact p | p without CF001 |
+|---|---|---|---|---|---|
+| 20–100 Hz | 0.33 | 0.43 | 0.45 | 0.61 | 0.94 |
+| 100–180 Hz | 0.26 | 0.30 | 0.45 | 0.71 | 0.57 |
+| 180–260 Hz (worker flight) | 0.069 | 0.061 | 0.65 | 0.76 | 0.91 |
+| 260–400 Hz | 0.136 | 0.078 | 0.75 | 0.32 | 0.51 |
+| 400–500 Hz | 0.044 | 0.034 | 0.65 | 0.56 | 0.91 |
+| 500–600 Hz (swarming) | 0.027 | 0.013 | 0.75 | 0.18 | 0.34 |
+| 600–1000 Hz | 0.061 | 0.036 | 0.70 | 0.44 | 0.63 |
+| 1–4 kHz | 0.039 | 0.029 | 0.55 | 0.68 | 1.00 |
+
+Shares of session power; session AUC is the fraction of the twenty
+queenright/queenless session pairs in which the queenright session has the
+larger share. The last column drops CF001, a queenless session that
+contributes six clips yet carries the same weight as a 1 200-clip session in
+every session-level mean on this page; the 20–100 Hz gap, the largest in the
+table, is mostly that one session. The swarming band, the best of the eight,
+is at p = 0.18 with all sessions and 0.34 without it — the same finding as
+above, now with a number on it.
+
 ---
 
 ## 2. The same model, three ways of splitting the data
@@ -175,7 +202,7 @@ a spectrogram network makes it invisible.
 
 ## Verification
 
-Seven checks, all passing:
+Eight checks, all passing:
 
 - the queen label, hive and session are parsed from every file-name
   pattern in the dataset, and documentation files are rejected
@@ -193,6 +220,10 @@ Seven checks, all passing:
   network's session and hive AUCs must be below 0.5, and the five wing-beat
   numbers must land between 0.5 and 0.8 on both honest protocols — the page
   is not allowed to claim a working detector
+- **no band separates the classes**: the exact permutation test over the
+  126 relabellings of nine sessions returns p > 0.1 for every band, with
+  and without the six-clip session, and the estimator returns 1/126 on a
+  perfectly separated case
 
 ---
 
@@ -223,9 +254,11 @@ The physics core is public in this repository:
 - `src/model.py` — the log-mel front end (filterbank written out) and the
   network
 - `src/train.py` — the three protocols, pooled scoring, resumable
+- `src/band_permutation.py` — the exact permutation test on the session
+  band table (standard library only)
 - `src/wingbeat_pinn.py` — the wing-beat mixture model, its named features,
   and the protocol comparison
-- `tests/test_all.py` — the seven checks above
+- `tests/test_all.py` — the eight checks above
 
 `results/` holds every number on this page as JSON. `data/SOURCE.md` says
 how to fetch the recordings; they are not redistributed here.
@@ -233,7 +266,8 @@ how to fetch the recordings; they are not redistributed here.
 ```
 pip install -r requirements.txt
 python src/download.py && python src/prepare.py
-python src/spectra.py && python src/train.py      # ~25 min on Apple silicon
+python src/spectra.py && python src/band_permutation.py
+python src/train.py                               # ~25 min on Apple silicon
 python src/wingbeat_pinn.py                       # ~20 min on a laptop CPU
 python src/figures.py && python tests/test_all.py
 ```
