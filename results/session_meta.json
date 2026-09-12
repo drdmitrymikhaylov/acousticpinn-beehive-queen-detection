@@ -1,0 +1,56 @@
+{
+  "CF001": {
+    "queen": 0,
+    "source": "OSBH",
+    "hive": "CF001",
+    "n_clips": 6
+  },
+  "CF003": {
+    "queen": 1,
+    "source": "OSBH",
+    "hive": "CF003",
+    "n_clips": 1200
+  },
+  "CJ001": {
+    "queen": 0,
+    "source": "OSBH",
+    "hive": "CJ001",
+    "n_clips": 374
+  },
+  "GH001": {
+    "queen": 1,
+    "source": "OSBH",
+    "hive": "GH001",
+    "n_clips": 695
+  },
+  "Hive1_12_06_2018": {
+    "queen": 1,
+    "source": "NU-Hive",
+    "hive": "Hive1",
+    "n_clips": 1200
+  },
+  "Hive1_31_05_2018": {
+    "queen": 0,
+    "source": "NU-Hive",
+    "hive": "Hive1",
+    "n_clips": 981
+  },
+  "Hive3_12_07_2017": {
+    "queen": 0,
+    "source": "NU-Hive",
+    "hive": "Hive3",
+    "n_clips": 1200
+  },
+  "Hive3_15_07_2017": {
+    "queen": 0,
+    "source": "NU-Hive",
+    "hive": "Hive3",
+    "n_clips": 1200
+  },
+  "Hive3_20_07_2017": {
+    "queen": 1,
+    "source": "NU-Hive",
+    "hive": "Hive3",
+    "n_clips": 321
+  }
+}

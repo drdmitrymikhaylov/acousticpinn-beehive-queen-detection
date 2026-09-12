@@ -1,0 +1,4 @@
+data/raw/
+data/clips/
+__pycache__/
+.DS_Store

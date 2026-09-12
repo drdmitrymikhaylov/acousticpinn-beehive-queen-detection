@@ -1,0 +1,66 @@
+{
+  "20-100 Hz (quiet colony)": {
+    "queenright_mean": 0.3327149159352299,
+    "queenright_sd": 0.14568263308781462,
+    "n_queenright": 4,
+    "queenless_mean": 0.42562120307162077,
+    "queenless_sd": 0.28254921073264205,
+    "n_queenless": 5
+  },
+  "100-180 Hz (low activity)": {
+    "queenright_mean": 0.25597925703948643,
+    "queenright_sd": 0.13401935937750548,
+    "n_queenright": 4,
+    "queenless_mean": 0.2971905352236652,
+    "queenless_sd": 0.16015722175654926,
+    "n_queenless": 5
+  },
+  "180-260 Hz (worker flight fundamental)": {
+    "queenright_mean": 0.06910618650185685,
+    "queenright_sd": 0.01599531609931403,
+    "n_queenright": 4,
+    "queenless_mean": 0.06064348759620345,
+    "queenless_sd": 0.03648157284753327,
+    "n_queenless": 5
+  },
+  "260-400 Hz": {
+    "queenright_mean": 0.13644764577146684,
+    "queenright_sd": 0.0478496356447732,
+    "n_queenright": 4,
+    "queenless_mean": 0.07788587391164678,
+    "queenless_sd": 0.08456844372757522,
+    "n_queenless": 5
+  },
+  "400-500 Hz": {
+    "queenright_mean": 0.044448756308870144,
+    "queenright_sd": 0.01427418616006771,
+    "n_queenright": 4,
+    "queenless_mean": 0.03419433002596347,
+    "queenless_sd": 0.02637164453584118,
+    "n_queenless": 5
+  },
+  "500-600 Hz (reported swarming band)": {
+    "queenright_mean": 0.02742480088529888,
+    "queenright_sd": 0.014685329439401715,
+    "n_queenright": 4,
+    "queenless_mean": 0.012717668755755474,
+    "queenless_sd": 0.010407193994285694,
+    "n_queenless": 5
+  },
+  "600-1000 Hz": {
+    "queenright_mean": 0.06143028424394612,
+    "queenright_sd": 0.04422497738658877,
+    "n_queenright": 4,
+    "queenless_mean": 0.03630862786396998,
+    "queenless_sd": 0.03430767382270334,
+    "n_queenless": 5
+  },
+  "1-4 kHz": {
+    "queenright_mean": 0.03857922078562778,
+    "queenright_sd": 0.026375321752986725,
+    "n_queenright": 4,
+    "queenless_mean": 0.029245955716122457,
+    "queenless_sd": 0.029654816969305768,
+    "n_queenless": 5
+  }
+}

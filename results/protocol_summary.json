@@ -1,0 +1,24 @@
+{
+  "random": {
+    "folds": 5,
+    "n": 4301,
+    "pooled_auc": 0.9999152208798862,
+    "pooled_bal_acc": 0.9950750251958355,
+    "per_fold_auc_mean": 0.9999253785294627,
+    "per_fold_auc_sd": 6.114973116808323e-05
+  },
+  "session": {
+    "folds": 9,
+    "n": 4301,
+    "pooled_auc": 0.0536450696183642,
+    "pooled_bal_acc": 0.13982726254276803
+  },
+  "hive": {
+    "folds": 6,
+    "n": 4301,
+    "pooled_auc": 0.3753266807676836,
+    "pooled_bal_acc": 0.38663831324154696,
+    "per_fold_auc_mean": 0.43324166666666664,
+    "per_fold_auc_sd": 0.05213055555555557
+  }
+}
