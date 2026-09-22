@@ -1,8 +1,9 @@
-"""Log-mel front end and a small convolutional classifier.
+"""Mel spectrogram input stage plus a compact CNN for clip classification.
 
-The filterbank is written out from the STFT rather than imported, so the whole
-front end is inspectable and the low band -- where hive sound actually lives --
-is not quietly discarded by a default fmin.
+Instead of calling a library for the mel filterbank, this file builds it
+directly from the STFT bins.  Every step of the front end can therefore be
+read and checked, and the low frequencies where a hive actually puts its
+energy are kept rather than being cut off by somebody else's default fmin.
 """
 from __future__ import annotations
 

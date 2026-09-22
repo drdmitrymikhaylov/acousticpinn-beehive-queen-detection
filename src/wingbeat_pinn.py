@@ -1,30 +1,30 @@
-"""The hum as a population of wing beats, not as a spectrogram.
+"""A spectral model of the colony built from individual wing strokes.
 
-A hive sounds the way it does because tens of thousands of bees beat their
-wings.  Each bee is a periodic source: a wing stroke at a fundamental f0
-(around 200-250 Hz for a worker; it moves with the bee's size, load and
-temperature) and the harmonics of that stroke.  The colony spectrum is the
-superposition,
+Tens of thousands of bees beating their wings are what make a hive sound the
+way it does.  Every bee is a periodic source: its wing stroke has a
+fundamental f0 (a worker is usually quoted at 200-250 Hz, shifting with size,
+load and temperature), and that stroke carries harmonics.  Summing over the
+colony gives
 
     S(f) = g * [ sum_k p(f0_k) sum_h a(h, f0_k) L(f; h f0_k, h gamma)  +  B(f) ],
 
-with p(f0) the distribution of wing-beat frequencies in the colony, a(h, f0)
-the harmonic profile of a stroke (a small network of harmonic number and
-fundamental), L a Lorentzian line of width proportional to the harmonic
-number, and B(f) a smooth power-law background for everything that is not a
-wing beat (ventilation, the box, the microphone).
+where p(f0) is the colony's distribution of wing-beat frequencies, a(h, f0)
+the harmonic profile of one stroke (a small network taking harmonic number
+and fundamental), L a Lorentzian line whose width scales with harmonic
+number, and B(f) a smooth power-law floor that absorbs everything that is not
+a wing beat (ventilation, the box, the microphone).
 
-The classifier in train.py sees a log-mel image and is free to learn whatever
-tells the sessions apart.  This model can only explain a spectrum through
-wing beats and a background, and the numbers it returns per clip have names:
-the mean and spread of the colony's wing-beat frequency, the share of power
-in the harmonic comb, the background slope.  Whether those numbers carry the
-queen's status -- and whether they carry it *across hives*, where the
-spectrogram model fails -- is the question this file asks.
+The classifier in train.py looks at a log-mel image and may pick up whatever
+separates the sessions.  This model has far less freedom: it can only account
+for a spectrum with wing beats plus a background, and each per-clip output has
+a physical name -- the mean and spread of the colony's wing-beat frequency,
+the fraction of power sitting in the harmonic comb, the slope of the
+background.  The file exists to test whether those quantities carry the
+queen's status, and in particular whether they carry it across hives, which
+is where the spectrogram model breaks down.
 
-Everything is fitted to the spectra alone; the queen label is used only
-afterwards, in a logistic regression evaluated under the same three protocols
-as train.py.
+All fitting uses the spectra only.  The queen label appears afterwards, in a
+logistic regression scored under the same three protocols as train.py.
 """
 from __future__ import annotations
 
