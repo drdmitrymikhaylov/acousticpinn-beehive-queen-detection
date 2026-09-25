@@ -1,11 +1,22 @@
 cff-version: 1.2.0
 message: "If you use this repository, please cite it as below."
 type: software
-title: "acousticpinn-beehive-queen-detection"
+title: "AcousticPINN: Queen Presence Detection from Beehive Sound"
+abstract: "Is the queen there? Hive sound under three split protocols"
 authors:
   - family-names: Mikhaylov
     given-names: Dmitry
     orcid: "https://orcid.org/0009-0009-2108-6820"
+    affiliation: "Abu Dhabi Maritime Academy, AD Ports Group"
 repository-code: "https://github.com/drdmitrymikhaylov/acousticpinn-beehive-queen-detection"
+url: "https://github.com/drdmitrymikhaylov/acousticpinn-beehive-queen-detection"
 license: "CC-BY-4.0"
-year: 2026
+keywords:
+  - "acoustic monitoring"
+  - "beehive monitoring"
+  - "bioacoustics"
+  - "leakage"
+  - "physics informed neural networks"
+  - "precision apiculture"
+  - "pytorch"
+date-released: "2026-09-12"
