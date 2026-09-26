@@ -17,6 +17,10 @@ all.
 
 ---
 
+## Where this comes from
+
+Hive acoustics came to me from the field: beekeepers and agricultural clients who lose colonies because nobody notices a queenless hive until it is too late. A hive tells you everything through its hum, if you know which physics to listen for. I have worked on that signal for years in research and client projects, and this repository puts the core of it in the open: a wing-beat model of the colony built from first principles and tested on public recordings from six hives.
+
 ## 1. The recordings
 
 Inês Nolasco and Emmanouil Benetos, *To bee or not to bee: an annotated
