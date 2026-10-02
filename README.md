@@ -48,8 +48,8 @@ queens, and every number below should be read with it in mind.
 | # | Finding | Evidence |
 |---|---------|----------|
 | 1 | Two thirds to four fifths of a hive's acoustic energy is below 260 Hz, and the sessions of one class differ from each other by more than the classes differ. The textbook 180-260 Hz "worker flight" band holds 7 % of the power in queenright and 6 % in queenless sessions. | section 3 |
-| 2 | **A random split over clips gives AUC 0.9999.** The same network, asked about a session it has not heard, gives **0.05**; about a hive it has not heard, **0.38**. Below chance is not noise. The network learned to recognise sessions, and the nearest session usually has the other label. | section 4 |
-| 3 | The hum is well described as a harmonic comb - a learned single-bee spectrum with a 2.4 Hz line width that widens with harmonic number. But the model places most of the colony's fundamental at 100-160 Hz, not at the textbook 200-250 Hz. Either these recordings hum lower than the literature says, or the model is reading something periodic that is not a bee (see below). | section 5 |
+| 2 | **A random split over clips gives AUC 0.9999.** The same network, asked about a session it has not heard, gives **0.05**; about a hive it has not heard, **0.38**. Below chance is not noise. The network learned to recognise sessions: no held-out session is called right by a majority of its clips, and every queenless session scores above every queenright one (2 of 126 relabellings are that extreme, p = 0.016). The "nearest session has the other label" explanation given first covers five of the nine sessions at most. | sections 4, 4.1 |
+| 3 | The hum is well described as a harmonic comb - a learned single-bee spectrum with a 2.4 Hz line width that widens with harmonic number. But the model places most of the colony's fundamental at 100-160 Hz, not at the textbook 200-250 Hz - in the five NU-Hive sessions. In the four citizen-science hives it piles the mass against the 80 Hz floor of its grid instead. Either these recordings hum lower than the literature says, or the model is reading something periodic that is not a bee (see below). | sections 5, 5.1 |
 | 4 | Five named quantities from the wing-beat model transfer where the network does not: AUC **0.60** across sessions and **0.62** across hives, against 0.52 / 0.57 for band energies. That is above chance and nowhere near a product. | section 5 |
 | 5 | The full wing-beat distribution p(f0), fed to the same regression, does worse than chance across sessions (0.20). Fifty-five numbers per clip are enough to learn session identity again. The physics helps only when it is reduced to the few quantities that mean something. | section 5 |
 
@@ -140,6 +140,64 @@ other label (Hive1's two days, Hive3's three). A model that had learned
 *queens* would sit near 0.5 on a held-out session at worst. This one learned
 *sessions*, and it says so.
 
+### 4.1 The same result, session by session
+
+The pooled AUC hides which sessions are wrong. From the out-of-fold
+probabilities of the leave-one-session-out run (`results/cv/`,
+`src/session_checks.py`, `results/session_checks.json`; added 2 October):
+
+| held-out session | truth | clips | called queenright | median p(queenright) |
+|---|---|---|---|---|
+| CF001 | queenless | 6 | 83 % | 0.99 |
+| CF003 | queenright | 600 | 13 % | 0.01 |
+| CJ001 | queenless | 374 | 81 % | 0.96 |
+| GH001 | queenright | 600 | 21 % | 0.07 |
+| Hive1, 31 May | queenless | 600 | 50 % | 0.50 |
+| Hive1, 12 June | queenright | 600 | 0 % | 3e-07 |
+| Hive3, 12 July | queenless | 600 | 99.8 % | 1.00 |
+| Hive3, 15 July | queenless | 600 | 95 % | 1.00 |
+| Hive3, 20 July | queenright | 321 | 0.6 % | 1e-05 |
+
+No session is called right by a majority of its clips. Seven of the nine
+are called wrong on more than 80 % of their clips, GH001 on 79 %, and the
+ninth, Hive1 on 31 May, is a coin: 301 of 600. Ranked by mean probability,
+every queenless session sits above every queenright one, a session-level
+AUC of 0 out of 20 pairs. Only 2 of the 126 relabellings of nine sessions
+are that extreme in either direction, p = 0.016. At the unit this page
+insists on, the reversal is not noise.
+
+Two things in that table change what was said above.
+
+**The explanation covers five sessions, not nine.** "The nearest session
+has the other label" can only be about Hive1 and Hive3, where the same hive
+is in the training set on another day. The four citizen-science hives have
+one session each, nothing of theirs is in training, and they are called
+wrong just as firmly (5 of 6 clips, 87 %, 81 %, 79 %). It does not fit
+Hive3 either: the queenless day of 12 July has a queenless neighbour three
+days later and a queenright one eight days later, and is called queenright
+on 99.8 % of its clips. The stored probabilities do not say which training
+session a held-out one was matched to. The sentence was a guess and should
+have been written as one.
+
+**Chance is not 0.5 under this protocol.** Holding a queenright session out
+leaves a training set that is 41-45 % queenright; holding a queenless one
+out leaves 49-57 %. A model that learned nothing and returned its training
+prior would score every queenright clip below every queenless one: pooled
+AUC 0.00, not 0.50. The network's outputs are nowhere near those priors
+(medians from 3e-07 to 1.00), so the prior alone is not what it is doing.
+But some pull below 0.5 is built into leave-one-out with pooled scoring, and
+its size cannot be read from these files. A run with the labels shuffled
+across sessions would measure it, and that has not been done. "Near 0.5 at
+worst" was too strong.
+
+Leave-one-hive-out reads the same way. The network gives a held-out hive
+one label whatever the day. Hive1 is called queenless on 99.8 % of its
+queenless clips and on 100 % of its queenright ones (within-hive AUC 0.49).
+Hive3 is called queenright on 75 % and 82 % (0.38). CF003 and GH001 are
+called wrong on 76 % and 79 %, CF001 on 6 of 6, and CJ001 is the one hive
+called right, on 65 %. The pooled 0.375 comes from which label each hive is
+handed, not from any ordering within a hive.
+
 ---
 
 ## 5. A physical model of the hum
@@ -169,7 +227,9 @@ the fundamental, and a harmonic profile that decays over five harmonics. The
 learned colony distributions put most of the mass at 100-160 Hz, with the
 textbook 180-260 Hz band nearly empty in every session. Where the mass sits
 differs by session far more than by class. The queenless sessions include
-one at 104 Hz and, on six clips, one at 245 Hz.
+one at 104 Hz and, on six clips, one at 245 Hz. (Section 5.1 checks this
+paragraph session by session; the first sentence about the mass holds for
+five sessions of nine.)
 
 **What the quantities are worth.** Five values per clip go into a logistic
 regression under the same three protocols: mean and spread of f0, share of
@@ -196,12 +256,77 @@ act on.
 like. It does not know what a bee is. Any periodic source in the recording
 is decomposed into "bees" at whatever fundamental fits: mains hum at 50 or
 60 Hz and its harmonics, a fan, a compressor in the citizen-science
-recordings. The mass at 100 and 150 Hz in several sessions is exactly where
+recordings. The mass at 100 and 150 Hz in several sessions (two, on a
+closer look: section 5.1) is exactly where
 the harmonics of a 50 Hz mains would sit. This is the same lesson as
 section 4 in a different coat. The decomposition is only as good as the
 recording. A physical model at least makes that failure visible - a
 distribution parked at mains harmonics can be seen in the left panel - where
 a spectrogram network hides it.
+
+### 5.1 The distributions, session by session
+
+Two sentences above describe nine distributions at once. Opened up, as
+shares of p(f0) on the 55-point grid (`results/session_checks.json`; added
+2 October):
+
+| session | source | 80-95 Hz | 100-160 Hz | 180-260 Hz | p at 100 Hz | comb share |
+|---|---|---|---|---|---|---|
+| CF001 | OSBH | 0.21 | 0.10 | 0.03 | 0.00 | 0.003 |
+| CF003 | OSBH | 0.30 | 0.18 | 0.21 | 0.05 | 0.74 |
+| CJ001 | OSBH | 0.84 | 0.07 | 0.03 | 0.01 | 0.51 |
+| GH001 | OSBH | 0.46 | 0.42 | 0.02 | 0.03 | 0.92 |
+| Hive1, 31 May | NU-Hive | 0.16 | 0.69 | 0.13 | 0.04 | 0.67 |
+| Hive1, 12 June | NU-Hive | 0.03 | 0.89 | 0.03 | 0.03 | 0.90 |
+| Hive3, 12 July | NU-Hive | 0.01 | 0.83 | 0.02 | 0.00 | 0.97 |
+| Hive3, 15 July | NU-Hive | 0.06 | 0.60 | 0.30 | 0.15 | 0.61 |
+| Hive3, 20 July | NU-Hive | 0.12 | 0.55 | 0.26 | 0.21 | 0.47 |
+
+**Correction: "most of the mass at 100-160 Hz" is true of the five NU-Hive
+sessions (55-89 %) and of none of the four citizen-science hives (7-42 %).**
+In those four the distribution is piled against the bottom of the grid. The
+four lowest grid points, 80-95 Hz, hold 21-84 % of the mass, and the single
+lowest point, 80 Hz, holds 30 % in CJ001 and 31 % in GH001. A distribution
+leaning on the edge of its grid is asking for a fundamental the grid does
+not offer. CJ001's mean of 104 Hz and GH001's 127 Hz mark where the grid
+starts, not a wing-beat frequency. The 180-260 Hz band is nearly empty
+(2-3 %) in five sessions, not in every one: it holds 13 %, 21 %, 26 % and
+30 % in the other four.
+
+**The mains suspicion narrows to two sessions.** A line at 100 Hz that
+stands clear of its neighbours appears in Hive3 on 15 and 20 July: 15 % and
+21 % of the mass in one grid point, 6.1 and 5.2 times the mean of the points
+either side. In the other seven sessions the 100 Hz point holds 0-5 % and
+0.2-1.6 times its neighbours. Hive3 on 12 July, the same hive three days
+earlier, has 0.4 % there. So "several sessions" was two, and whatever puts a
+line at 100 Hz was not there, or not audible, on 12 July. Those are also
+the two sessions with the most mass in 180-260 Hz (30 % and 26 %).
+
+**CF001 has no comb to describe.** On its six clips the model assigns 0.3 %
+of the power to wing beats and the rest to the background. The 245 Hz
+quoted above is the mean of a distribution fitted to almost nothing.
+
+**The named quantities at the session level.** The 0.60 and 0.62 in the
+table are pooled over clips. Four of the five quantities are stored as
+session means (the background level is not), and they go through the same
+exact test as the band table in section 3:
+
+| quantity | queenright | queenless | session AUC | exact p | p without CF001 |
+|---|---|---|---|---|---|
+| mean f0 (Hz) | 146 | 159 | 0.45 | 0.74 | 0.66 |
+| spread of f0 (Hz) | 57 | 54 | 0.65 | 0.83 | 0.54 |
+| comb share | 0.76 | 0.55 | 0.65 | 0.36 | 0.63 |
+| background slope | 1.40 | 2.03 | 0.35 | 0.36 | 0.69 |
+
+None separates nine sessions (p from 0.36 up), and the two that come
+closest lose even that without the six-clip session. Whatever the
+regression finds across clips, it is not a difference between session
+means.
+
+**Which clips.** The network rows use 4 301 clips (at most 600 per
+session). The three logistic-regression rows use 2 406 (at most 300 per
+session, `MAX_CLIPS_PER_SESSION` in `src/wingbeat_pinn.py`). Each row is
+comparable across its three protocols. The rows are not on the same clips.
 
 ---
 
@@ -229,6 +354,11 @@ Eight checks, all passing:
   126 relabellings of nine sessions returns p > 0.1 for every band, with
   and without the six-clip session. The estimator itself returns 1/126 on a
   perfectly separated case.
+
+A second file, `tests/test_readme_numbers.py` (twelve checks, added
+2 October), recomputes sections 4.1 and 5.1 from the stored outputs and
+pins every number in them to `results/session_checks.json`. It needs no
+audio.
 
 ---
 
@@ -258,14 +388,17 @@ analysed. Fetching the rest of the raw audio (3.7 GB) from Zenodo only
 worked with resumable `curl -C -` and retries. The finished version, with
 the wing-beat model added, went public on 12 September. The exact
 permutation test in section 3 and the eighth check came later the same day.
-Until then the band claim rested on eyeballing the spread.
+Until then the band claim rested on eyeballing the spread. On 2 October
+the pooled numbers of sections 4 and 5 were opened session by session
+(4.1, 5.1). That cost the page one explanation and half of one sentence,
+both marked where they stand. `CHANGELOG.md` keeps the dated list.
 
 Two things I would not call finished. The global fit of the wing-beat model
 reaches a log-spectral RMSE of 0.60 after 1 500 Adam steps, which is
 mediocre. And the mains-harmonic problem in section 5 is stated, not
 handled. Notching or masking the 50 Hz harmonics before the fit, and running
 more steps, are the obvious next moves. For scale, `train.py` takes about
-25 minutes on Apple silicon and `wingbeat_pinn.py` about 20 minutes on a
+25 minutes on a laptop GPU and `wingbeat_pinn.py` about 20 minutes on a
 laptop CPU.
 
 ---
@@ -283,7 +416,11 @@ The physics core is public in this repository:
   band table (standard library only)
 - `src/wingbeat_pinn.py` - the wing-beat mixture model, its named features,
   and the protocol comparison
+- `src/session_checks.py` - sections 4.1 and 5.1: the stored outputs read
+  one session at a time (numpy only, no audio)
 - `tests/test_all.py` - the eight checks above
+- `tests/test_readme_numbers.py` - sections 4.1 and 5.1 pinned to the
+  results files
 
 `results/` holds every number on this page as JSON. `data/SOURCE.md` says
 how to fetch the recordings; they are not redistributed here.
@@ -292,9 +429,10 @@ how to fetch the recordings; they are not redistributed here.
 pip install -r requirements.txt
 python src/download.py && python src/prepare.py
 python src/spectra.py && python src/band_permutation.py
-python src/train.py                               # ~25 min on Apple silicon
+python src/train.py                               # ~25 min on a laptop GPU
 python src/wingbeat_pinn.py                       # ~20 min on a laptop CPU
-python src/figures.py && python tests/test_all.py
+python src/session_checks.py                      # seconds, no audio
+python src/figures.py && python -m pytest tests
 ```
 
 ---
