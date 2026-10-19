@@ -1,0 +1,23 @@
+{
+  "upload_type": "software",
+  "title": "AcousticPINN: Queen Presence Detection from Beehive Sound",
+  "description": "Is the queen there? Hive sound under three split protocols",
+  "creators": [
+    {
+      "name": "Mikhaylov, Dmitry",
+      "orcid": "0009-0009-2108-6820",
+      "affiliation": "Abu Dhabi Maritime Academy, AD Ports Group"
+    }
+  ],
+  "license": "cc-by-4.0",
+  "keywords": [
+    "acoustic monitoring",
+    "beehive monitoring",
+    "bioacoustics",
+    "leakage",
+    "physics informed neural networks",
+    "precision apiculture",
+    "pytorch"
+  ],
+  "access_right": "open"
+}
