@@ -2,6 +2,7 @@ cff-version: 1.2.0
 message: "If you use this repository, please cite it as below."
 type: software
 title: "AcousticPINN: Queen Presence Detection from Beehive Sound"
+doi: "10.5281/zenodo.23529526"
 abstract: "Is the queen there? Hive sound under three split protocols"
 authors:
   - family-names: Mikhaylov
