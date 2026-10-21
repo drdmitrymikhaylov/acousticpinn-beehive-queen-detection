@@ -1,5 +1,7 @@
 # Is the queen there? What hive sound can and cannot say
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23529526.svg)](https://doi.org/10.5281/zenodo.23529526)
+
 A queenless colony has weeks to live, and beekeepers have long said they
 can hear it. Published classifiers agree, with accuracies in the high
 nineties. This repository asks a narrower question. Someone who wants to put
