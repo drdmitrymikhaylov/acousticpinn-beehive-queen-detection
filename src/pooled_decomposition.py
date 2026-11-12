@@ -220,7 +220,8 @@ def main():
           f"{s['cells_above_half']} above 0.5, {s['cells_below_0_1']} below 0.1; CF001 weight "
           f"{100 * s['weight_share_CF001']:.2f} %, pooled without it {s['pooled_auc_without_CF001']:.4f}; "
           f"largest cell weight {100 * s['largest_cell_weight_share']:.1f} %")
-    print(f"{'queenright \\\\ queenless':26s}" + "".join(f"{j[:14]:>16s}" for j in
+    head = "queenright / queenless"
+    print(f"{head:26s}" + "".join(f"{j[:14]:>16s}" for j in
           [c['queenless'] for c in list(s['cells'].values())[:5]]))
     qr = sorted({c["queenright"] for c in s["cells"].values()})
     ql = sorted({c["queenless"] for c in s["cells"].values()})
