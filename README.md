@@ -50,7 +50,7 @@ queens, and every number below should be read with it in mind.
 | # | Finding | Evidence |
 |---|---------|----------|
 | 1 | Two thirds to four fifths of a hive's acoustic energy is below 260 Hz, and the sessions of one class differ from each other by more than the classes differ. The textbook 180-260 Hz "worker flight" band holds 7 % of the power in queenright and 6 % in queenless sessions. | section 3 |
-| 2 | **A random split over clips gives AUC 0.9999.** The same network, asked about a session it has not heard, gives **0.05**; about a hive it has not heard, **0.38**. Below chance is not noise. The network learned to recognise sessions: no held-out session is called right by a majority of its clips, and every queenless session scores above every queenright one (2 of 126 relabellings are that extreme, p = 0.016). The "nearest session has the other label" explanation given first covers five of the nine sessions at most. | sections 4, 4.1 |
+| 2 | **A random split over clips gives AUC 0.9999.** The same network, asked about a session it has not heard, gives **0.05**; about a hive it has not heard, **0.38**. Below chance is not noise. The network learned to recognise sessions: no held-out session is called right by a majority of its clips, and every queenless session scores above every queenright one (2 of 126 relabellings are that extreme, p = 0.016). The "nearest session has the other label" explanation given first covers five of the nine sessions at most. *Added 12 November 2026:* the reversal holds in all 20 session-pair cells (none above 0.5, 16 below 0.1), and the training prior accounts for about 0.01 of it; under leave-one-hive-out 84 % of the pooled weight is which label a hive was handed, and with those pairs at chance the 0.375 would read 0.49. | sections 4, 4.1, 4.2 |
 | 3 | The hum is well described as a harmonic comb - a learned single-bee spectrum with a 2.4 Hz line width that widens with harmonic number. But the model places most of the colony's fundamental at 100-160 Hz, not at the textbook 200-250 Hz - in the five NU-Hive sessions. In the four citizen-science hives it piles the mass against the 80 Hz floor of its grid instead. Either these recordings hum lower than the literature says, or the model is reading something periodic that is not a bee (see below). | sections 5, 5.1 |
 | 4 | Five named quantities from the wing-beat model transfer where the network does not: AUC **0.60** across sessions and **0.62** across hives, against 0.52 / 0.57 for band energies. That is above chance and nowhere near a product. | section 5 |
 | 5 | The full wing-beat distribution p(f0), fed to the same regression, does worse than chance across sessions (0.20). Fifty-five numbers per clip are enough to learn session identity again. The physics helps only when it is reduced to the few quantities that mean something. | section 5 |
@@ -198,7 +198,94 @@ queenless clips and on 100 % of its queenright ones (within-hive AUC 0.49).
 Hive3 is called queenright on 75 % and 82 % (0.38). CF003 and GH001 are
 called wrong on 76 % and 79 %, CF001 on 6 of 6, and CJ001 is the one hive
 called right, on 65 %. The pooled 0.375 comes from which label each hive is
-handed, not from any ordering within a hive.
+handed, not from any ordering within a hive. (Section 4.2 puts a number on
+that sentence: with the cross-hive pairs set to chance the pooled AUC would
+be 0.49.)
+
+### 4.2 What the pooled number is made of
+
+*Added 12 November 2026. Computed by `src/pooled_decomposition.py` from
+`results/cv/` (the five random-split folds are now in it too, 20 files);
+numbers in `results/pooled_decomposition.json`, pinned by
+`tests/test_pooled_decomposition.py`. No audio.*
+
+Under leave-one-session-out every held-out session carries one label, so
+the pooled AUC compares clips scored by nine different models, and it is
+exactly a clip-weighted mean of twenty session-pair cells: for each
+(queenright session, queenless session), the share of clip pairs in which
+the queenright clip scores higher. Opened up:
+
+| queenright \ queenless | CF001 | CJ001 | Hive1, 31 May | Hive3, 12 July | Hive3, 15 July |
+|---|---|---|---|---|---|
+| CF003 | 0.098 | 0.076 | 0.200 | 0.001 | 0.028 |
+| GH001 | 0.141 | 0.103 | 0.292 | 0.000 | 0.032 |
+| Hive1, 12 June | 0.001 | 0.001 | 0.005 | 0.000 | 0.000 |
+| Hive3, 20 July | 0.009 | 0.006 | 0.025 | 0.000 | 0.002 |
+
+Three things the single number did not say.
+
+*The reversal is in every cell, not in a few.* None of the 20 is above
+0.5, 16 of them are below 0.1, the median is 0.008 and the largest is 0.29
+(GH001 against Hive1 on 31 May). The two NU-Hive queenright sessions are
+below *every* queenless session on more than 97 % of their clip pairs; the
+two citizen-science queenright hives keep 8 to 29 % of their pairs
+against the citizen-science and Hive1 queenless sessions and 0 to 3 %
+against Hive3. The session-level AUC of 0 out of 20 in section 4.1 is not a
+ranking of nine means that happen to fall one way: it holds pair by pair
+at the clip level.
+
+*The weights are not the ones section 4.1 uses.* CF001's six clips carry
+one ninth of every session-level statistic on this page and 0.3 % of the
+pooled AUC; the pooled number without that session is 0.0536, the same to
+four decimals. No cell carries more than 7.8 % of the weight (the 600 × 600
+cells), and the unweighted mean of the twenty cells is 0.051 against the
+clip-weighted 0.054. Here, unlike in section 3, the two units agree.
+
+*The training prior is not the pull.* Section 4.1 said that some pull
+below 0.5 is built into leave-one-out with pooled scoring and that its
+size could not be read from these files. The part that comes from the
+prior can be. Each fold's training prior (41 to 45 % queenright with a
+queenright session out, 49 to 57 % with a queenless one) is a shift of
+0.02 to 0.36 logits; the network's own outputs sit at median absolute
+logits of 2.5 to 14.9 per session. Shifting every fold's probabilities by
+minus the logit of its training prior moves the pooled AUC from 0.054 to
+0.064, and undoing the largest prior shift in every fold gives 0.066. To
+bring the pooled AUC to 0.5 the queenright sessions would have to be
+pushed up by 6.8 logits, twenty times the largest prior. (Centring every
+session at its own median gives 0.50, as it must: the whole reversal is in
+the levels, and the levels are what a prior-only model returns in the same
+direction, pooled AUC 0.00.) What the prior accounts for is about 0.01 of
+AUC. The rest is what the network learned about these sessions, and a
+label-shuffled run would still be needed to say how much of *that* is the
+protocol and how much is the sessions.
+
+The same sum under leave-one-hive-out, with the weight of each cell:
+
+| queenright \ queenless | CF001 | CJ001 | Hive1 | Hive3 |
+|---|---|---|---|---|
+| CF003 | 0.02 (0.1 %) | 0.47 (4.9 %) | 0.99 (7.8 %) | 0.15 (15.6 %) |
+| GH001 | 0.01 (0.1 %) | 0.44 (4.9 %) | 0.99 (7.8 %) | 0.14 (15.6 %) |
+| Hive1 | 0.00 (0.1 %) | 0.01 (4.9 %) | 0.49 (7.8 %) | 0.00 (15.6 %) |
+| Hive3 | 0.14 (0.0 %) | 0.77 (2.6 %) | 1.00 (4.2 %) | 0.38 (8.3 %) |
+
+The diagonal is the ordering within a hive (0.49 and 0.38, as above); it
+holds 16 % of the pooled weight at 0.43. The other 84 % is which label a
+hive was handed against which other hive, at 0.36. With the cross-hive
+pairs set to chance the pooled AUC would be 0.49; with the within-hive
+pairs set to chance, 0.39. The 0.375 is the off-diagonal. And the
+off-diagonal has a shape: the two citizen-science queenright hives and
+Hive3 are scored *above* Hive1's queenless day on 99 to 100 % of pairs,
+and the same two citizen-science hives are scored *below* Hive3's queenless
+days on 85 to 86 %. Held out as a whole hive, Hive1 is called queenless and
+Hive3 queenright whatever the day (section 4.1), and the cross-hive cells
+are those two calls seen from the other hives. The network ranks hives,
+not queens.
+
+What this does not show: the cells are not independent (every session
+appears in four or five of them); the random-split folds reproduce the
+0.9999 fold by fold (0.9998 to 1.0000) and say nothing new; and the
+label-shuffled run that would size the protocol's own pull is still not
+done, since the clips are no longer on this machine.
 
 ---
 
@@ -360,7 +447,10 @@ Eight checks, all passing:
 A second file, `tests/test_readme_numbers.py` (twelve checks, added
 2 October), recomputes sections 4.1 and 5.1 from the stored outputs and
 pins every number in them to `results/session_checks.json`. It needs no
-audio.
+audio. A third, `tests/test_pooled_decomposition.py` (six checks, added
+12 November), recomputes the twenty session-pair cells of section 4.2
+from `results/cv/`, checks that their clip-weighted mean is the pooled
+AUC, and pins the section to `results/pooled_decomposition.json`.
 
 ---
 
@@ -420,8 +510,13 @@ The physics core is public in this repository:
   and the protocol comparison
 - `src/session_checks.py` - sections 4.1 and 5.1: the stored outputs read
   one session at a time (numpy only, no audio)
+- `src/pooled_decomposition.py` - section 4.2: the pooled AUCs opened into
+  session-pair and hive-pair cells, the training-prior shift, and the
+  random folds (numpy only, no audio)
 - `tests/test_all.py` - the eight checks above
 - `tests/test_readme_numbers.py` - sections 4.1 and 5.1 pinned to the
+  results files
+- `tests/test_pooled_decomposition.py` - section 4.2 pinned to the
   results files
 
 `results/` holds every number on this page as JSON. `data/SOURCE.md` says
@@ -434,6 +529,7 @@ python src/spectra.py && python src/band_permutation.py
 python src/train.py                               # ~25 min on a laptop GPU
 python src/wingbeat_pinn.py                       # ~20 min on a laptop CPU
 python src/session_checks.py                      # seconds, no audio
+python src/pooled_decomposition.py                # seconds, no audio
 python src/figures.py && python -m pytest tests
 ```
 

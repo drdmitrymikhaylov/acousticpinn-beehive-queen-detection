@@ -2,6 +2,33 @@
 
 Dated notes on what changed on this page and why. Newest first.
 
+## 2026-11-12
+
+- New section 4.2 "What the pooled number is made of"
+  (`src/pooled_decomposition.py`, `results/pooled_decomposition.json`).
+  The leave-one-session-out AUC of 0.054 opened into its twenty
+  session-pair cells (clip-weighted mean = the pooled number, asserted):
+  none above 0.5, 16 below 0.1, median 0.008, largest 0.29 — the reversal
+  holds pair by pair at the clip level, not only in the ranking of nine
+  session means. CF001 carries 0.3 % of the pooled weight (one ninth of
+  every session-level statistic); without it the number is 0.0536 to four
+  decimals.
+- The training-prior part of the pull below 0.5, which section 4.1 said
+  could not be read from the files, can: removing each fold's prior shift
+  (0.02 to 0.36 logits against network logits of 2.5 to 14.9) moves the
+  pooled AUC from 0.054 to 0.064; reaching 0.5 would take 6.8 logits. The
+  prior accounts for about 0.01 of AUC; the label-shuffled run is still
+  the only way to size the rest.
+- Leave-one-hive-out: 16 % of the pooled weight is the ordering within
+  Hive1 and Hive3 (0.43), 84 % is which label a hive was handed (0.36);
+  with the cross-hive pairs at chance the 0.375 would read 0.49. The
+  citizen-science queenright hives and Hive3 score above Hive1's queenless
+  day on 99–100 % of pairs and below Hive3's queenless days on 85–86 %:
+  the network ranks hives. Finding 2 and the section 4.1 sentence amended.
+- `results/cv/` now also holds the five random-split folds (20 files);
+  the stored 0.9999 reproduces fold by fold.
+- `tests/test_pooled_decomposition.py` (six checks) pins the section.
+
 ## 2026-10-19
 
 - LICENSE now holds the standard MIT text and LICENSE-CONTENT the standard CC BY 4.0 text, so GitHub recognises the licence (it showed "Other" before). The terms are unchanged; the note on what each licence covers moved to `NOTICE.md`.
